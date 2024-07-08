@@ -22,6 +22,14 @@ const fakeExpenses: Expense[] = [
 
 router.get("/", (req, res) => res.json({ expesnes: fakeExpenses }));
 
+router.get("/total-spent", (req, res) => {
+  const total = fakeExpenses.reduce(
+    (total, expense) => total + expense.amount,
+    0,
+  );
+  return res.json({ total });
+});
+
 router.post("/", validateRequestBody(createPostSchema), (req, res) => {
   const expense = req.body;
   fakeExpenses.push({ ...expense, id: fakeExpenses.length + 1 });
