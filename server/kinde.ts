@@ -21,17 +21,29 @@ export const kindeClient = createKindeServerClient(
 
 let store: Record<string, unknown> = {};
 
-export const sessionManager: SessionManager = {
+export const sessionManager = (req: any, res: any): SessionManager => ({
   async getSessionItem(key: string) {
-    return store[key];
+    const result = await req.cookies[key];
+    return result;
   },
   async setSessionItem(key: string, value: unknown) {
-    store[key] = value;
+    const cookieOptions = {
+      httpOnly: true,
+      secure: true,
+      sameSite: "Lax",
+    } as const;
+    if (typeof value === "string") {
+      res.cookie(key, JSON.stringify(value), cookieOptions);
+    } else {
+      res.cookie(key, JSON.stringify(value), cookieOptions);
+    }
   },
   async removeSessionItem(key: string) {
-    delete store[key];
+    res.clearCookie(key);
   },
   async destroySession() {
-    store = {};
+    ["id_token", "access_token", "user", "refresh_token"].forEach((key) => {
+      res.clearCookie(key);
+    });
   },
-};
+});
