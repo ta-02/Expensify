@@ -3,12 +3,15 @@ import morgan from "morgan";
 import bodyParser from "body-parser";
 import router from "./router";
 import path from "path";
+import authRouter from "./auth";
 
 const app: Express = express();
+
 app.use(morgan("dev"));
 app.use(bodyParser.json());
 
-const apiRoutes = app.use("/api", router);
+app.use("/api", authRouter);
+app.use("/api", router);
 
 app.use(express.static(path.join(__dirname, "../../frontend/dist")));
 
