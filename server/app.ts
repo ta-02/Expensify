@@ -8,7 +8,7 @@ const app: Express = express();
 app.use(morgan("dev"));
 app.use(bodyParser.json());
 
-app.use("/api/expenses", router);
+app.use("/api", router);
 
 app.use(express.static(path.join(__dirname, "../frontend/dist")));
 

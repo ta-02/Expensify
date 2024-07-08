@@ -20,9 +20,9 @@ const fakeExpenses: Expense[] = [
   { id: 3, title: "Osmows", amount: 20 },
 ];
 
-router.get("/", (req, res) => res.json({ expesnes: fakeExpenses }));
+router.get("/expenses", (req, res) => res.json({ expesnes: fakeExpenses }));
 
-router.get("/total-spent", (req, res) => {
+router.get("/expenses/total-spent", (req, res) => {
   const total = fakeExpenses.reduce(
     (total, expense) => total + expense.amount,
     0,
@@ -30,14 +30,14 @@ router.get("/total-spent", (req, res) => {
   return res.json({ total });
 });
 
-router.post("/", validateRequestBody(createPostSchema), (req, res) => {
+router.post("/expenses", validateRequestBody(createPostSchema), (req, res) => {
   const expense = req.body;
   fakeExpenses.push({ ...expense, id: fakeExpenses.length + 1 });
   res.status(201);
   return res.json(expense);
 });
 
-router.get("/:id([0-9]+)", (req, res) => {
+router.get("/expenses/:id([0-9]+)", (req, res) => {
   const id = Number.parseInt(req.params.id);
   const expense = fakeExpenses.find((expense) => expense.id === id);
   if (expense) {
@@ -47,7 +47,7 @@ router.get("/:id([0-9]+)", (req, res) => {
   }
 });
 
-router.delete("/:id([0-9]+)", (req, res) => {
+router.delete("/expenses/:id([0-9]+)", (req, res) => {
   const id = Number.parseInt(req.params.id);
   const index = fakeExpenses.findIndex((expense) => expense.id === id);
   if (index !== -1) {
