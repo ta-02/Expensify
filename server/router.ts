@@ -1,26 +1,19 @@
 import { Router } from "express";
 import { z } from "zod";
 import { validateRequestBody } from "zod-express-middleware";
+import { expenseSchema, Expense } from "../types/expense";
 
 const router = Router();
 
-const expenseScheme = z.object({
-  id: z.number().int().positive().min(1),
-  title: z.string().min(3).max(100),
-  amount: z.number().int().positive(),
-});
-
-type Expense = z.infer<typeof expenseScheme>;
-
-const createPostSchema = expenseScheme.omit({ id: true });
+const createPostSchema = expenseSchema.omit({ id: true });
 
 const fakeExpenses: Expense[] = [
   { id: 1, title: "Groceries", amount: 50 },
-  { id: 2, title: "games", amount: 100 },
+  { id: 2, title: "Games", amount: 100 },
   { id: 3, title: "Osmows", amount: 20 },
 ];
 
-router.get("/expenses", (req, res) => res.json({ expesnes: fakeExpenses }));
+router.get("/expenses", (req, res) => res.json({ expenses: fakeExpenses }));
 
 router.get("/expenses/total-spent", (req, res) => {
   const total = fakeExpenses.reduce(

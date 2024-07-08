@@ -6,4 +6,4 @@ export const expenseSchema = z.object({
   amount: z.number().int().positive(),
 });
 
-export type ExpenseType = z.infer<typeof expenseSchema>;
+export type Expense = z.infer<typeof expenseSchema>;
