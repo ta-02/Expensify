@@ -7,10 +7,10 @@ const router = (0, express_1.Router)();
 const createPostSchema = expense_1.expenseSchema.omit({ id: true });
 const fakeExpenses = [
     { id: 1, title: "Groceries", amount: 50 },
-    { id: 2, title: "games", amount: 100 },
+    { id: 2, title: "Games", amount: 100 },
     { id: 3, title: "Osmows", amount: 20 },
 ];
-router.get("/expenses", (req, res) => res.json({ expesnes: fakeExpenses }));
+router.get("/expenses", (req, res) => res.json({ expenses: fakeExpenses }));
 router.get("/expenses/total-spent", (req, res) => {
     const total = fakeExpenses.reduce((total, expense) => total + expense.amount, 0);
     return res.json({ total });

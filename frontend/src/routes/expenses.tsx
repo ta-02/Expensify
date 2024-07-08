@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { type Expense } from "../../../types/expense";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -10,18 +11,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import axios from "axios";
 
 export const Route = createFileRoute("/expenses")({
   component: Expenses,
 });
 
 const getAllExpenses = async () => {
-  const res = await fetch("/api/expenses");
-  if (!res.ok) {
-    throw new Error("server error");
-  }
-  const data = await res.json();
-  return data.expenses;
+  return axios
+    .get("/api/expenses")
+    .then((res) => res.data.expenses)
+    .catch((error) => {
+      throw new Error("Failed to fetch expenses: " + error.message);
+    });
 };
 
 function Expenses() {
@@ -33,9 +35,9 @@ function Expenses() {
   if (error) return "An error has occurred: " + error.message;
 
   return (
-    <div className="p-2">
+    <div className="p-4 w-[350px] m-auto">
       {isPending ? (
-        "Loading..."
+        <Skeleton className="w-[350px] mt-4 h-[20px] rounded-full" />
       ) : (
         <Table>
           <TableCaption>A list of your Expenses</TableCaption>

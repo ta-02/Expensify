@@ -1,9 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-
-export const Route = createFileRoute("/")({
-  component: Index,
-});
-
 import {
   Card,
   CardContent,
@@ -12,14 +7,19 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
-const getTotalSpent = async () => {
-  const res = await fetch("/api/expenses/total-spent");
-  if (!res.ok) {
-    throw new Error("server error");
-  }
-  const data = await res.json();
-  return data;
+export const Route = createFileRoute("/")({
+  component: Index,
+});
+
+const getTotalSpent = () => {
+  return axios
+    .get("/api/expenses/total-spent")
+    .then((res) => res.data)
+    .catch((error) => {
+      throw new Error("Failed to fetch total spent: " + error.message);
+    });
 };
 
 function Index() {
@@ -31,7 +31,7 @@ function Index() {
   if (error) return "An error has occurred: " + error.message;
 
   return (
-    <div className="flex justify-center items-start mt-4 w-screen h-screen">
+    <div className="p-4 w-[350px] m-auto">
       <Card>
         <CardHeader>
           <CardTitle>Total Spent</CardTitle>
