@@ -23,8 +23,8 @@ let store: Record<string, unknown> = {};
 
 export const sessionManager = (req: any, res: any): SessionManager => ({
   async getSessionItem(key: string) {
-    const result = await req.cookies[key];
-    return result;
+    const result = req.cookies[key];
+    return result ? JSON.parse(result) : null;
   },
   async setSessionItem(key: string, value: unknown) {
     const cookieOptions = {
@@ -32,11 +32,7 @@ export const sessionManager = (req: any, res: any): SessionManager => ({
       secure: true,
       sameSite: "Lax",
     } as const;
-    if (typeof value === "string") {
-      res.cookie(key, JSON.stringify(value), cookieOptions);
-    } else {
-      res.cookie(key, JSON.stringify(value), cookieOptions);
-    }
+    res.cookie(key, JSON.stringify(value), cookieOptions);
   },
   async removeSessionItem(key: string) {
     res.clearCookie(key);
