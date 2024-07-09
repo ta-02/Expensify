@@ -2,6 +2,7 @@ import {
   createKindeServerClient,
   GrantType,
   SessionManager,
+  type UserType,
 } from "@kinde-oss/kinde-typescript-sdk";
 import * as dotenv from "dotenv";
 import path from "path";
@@ -43,3 +44,25 @@ export const sessionManager = (req: any, res: any): SessionManager => ({
     });
   },
 });
+
+// type Env = {
+//   Variables: {
+//     user: UserType;
+//   };
+// };
+
+export async function getUser(req: any, res: any, next: any) {
+  try {
+    const manager = sessionManager(req, res);
+    const isAuthenticated = await kindeClient.isAuthenticated(manager);
+    if (!isAuthenticated) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+    const user = await kindeClient.getUserProfile(manager);
+    req.user = user;
+    next();
+  } catch (e) {
+    console.error(e);
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+}

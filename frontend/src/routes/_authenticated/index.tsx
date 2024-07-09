@@ -9,7 +9,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/_authenticated/")({
   component: Index,
 });
 

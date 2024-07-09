@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { FieldApi, useForm } from "@tanstack/react-form";
 import axios from "axios";
 
-export const Route = createFileRoute("/create-expense")({
+export const Route = createFileRoute("/_authenticated/create-expense")({
   component: CreateExpense,
 });
 
