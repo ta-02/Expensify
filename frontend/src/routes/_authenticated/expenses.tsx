@@ -15,7 +15,7 @@ import axios from "axios";
 type Expense = {
   id: "number";
   title: string;
-  amount: number;
+  amount: string;
 };
 
 export const Route = createFileRoute("/_authenticated/expenses")({

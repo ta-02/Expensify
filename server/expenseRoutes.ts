@@ -2,19 +2,32 @@ import { Router, Request, Response } from "express";
 import { validateRequestBody } from "zod-express-middleware";
 import { expenseSchema, Expense } from "./sharedTypes";
 import { getUser } from "./kindeAuth";
+import { UserInfo } from "./sharedTypes";
+import { db } from "./db";
+import { expenses as expenseTable } from "./db/schema";
+import { eq } from "drizzle-orm";
 
 const expenseRoutes = Router();
 
 const createPostSchema = expenseSchema.omit({ id: true });
 
 const fakeExpenses: Expense[] = [
-  { id: 1, title: "Groceries", amount: 50 },
-  { id: 2, title: "Games", amount: 100 },
-  { id: 3, title: "Osmows", amount: 20 },
+  { id: 1, title: "Groceries", amount: "50" },
+  { id: 2, title: "Games", amount: "100" },
+  { id: 3, title: "Osmows", amount: "20" },
 ];
 
-expenseRoutes.get("/expenses", getUser, (req: Request, res: Response) =>
-  res.json({ expenses: fakeExpenses })
+expenseRoutes.get(
+  "/expenses",
+  getUser,
+  async (req: UserInfo, res: Response) => {
+    const user = req.user;
+    const expenses = await db
+      .select()
+      .from(expenseTable)
+      .where(eq(expenseTable.userId, user.id));
+    return res.json({ expenses: expenses });
+  },
 );
 
 expenseRoutes.get(
@@ -22,23 +35,26 @@ expenseRoutes.get(
   getUser,
   (req: Request, res: Response) => {
     const total = fakeExpenses.reduce(
-      (total, expense) => total + expense.amount,
-      0
+      (total, expense) => total + +expense.amount,
+      0,
     );
     return res.json({ total });
-  }
+  },
 );
 
 expenseRoutes.post(
   "/expenses",
   getUser,
   validateRequestBody(createPostSchema),
-  (req: Request, res: Response) => {
+  async (req: UserInfo, res: Response) => {
+    const user = req.user;
     const expense = req.body;
-    fakeExpenses.push({ ...expense, id: fakeExpenses.length + 1 });
-    res.status(201);
-    return res.json(expense);
-  }
+    const result = await db
+      .insert(expenseTable)
+      .values({ ...expense, userId: user.id })
+      .returning();
+    return res.status(201).json(result);
+  },
 );
 
 expenseRoutes.get(
@@ -52,7 +68,7 @@ expenseRoutes.get(
     } else {
       res.status(404).send("Expense not found");
     }
-  }
+  },
 );
 
 expenseRoutes.delete(
@@ -67,7 +83,7 @@ expenseRoutes.delete(
     } else {
       res.status(404).send("Expense not found");
     }
-  }
+  },
 );
 
 export default expenseRoutes;

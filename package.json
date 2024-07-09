@@ -21,14 +21,17 @@
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
+    "drizzle-orm": "^0.31.4",
     "express": "^4.19.2",
     "morgan": "^1.10.0",
+    "postgres": "^3.4.4",
     "zod": "^3.23.8",
     "zod-express-middleware": "^1.4.0"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
     "@types/node": "^20.14.10",
+    "drizzle-kit": "^0.22.8",
     "nodemon": "^3.1.4",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.3"
