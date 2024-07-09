@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { type Expense } from "../../../../types/expense";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
@@ -12,6 +11,12 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import axios from "axios";
+
+type Expense = {
+  id: "number";
+  title: string;
+  amount: number;
+};
 
 export const Route = createFileRoute("/_authenticated/expenses")({
   component: Expenses,

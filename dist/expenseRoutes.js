@@ -2,30 +2,27 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const zod_express_middleware_1 = require("zod-express-middleware");
-const expense_1 = require("../types/expense");
-const kinde_1 = require("./kinde");
-const router = (0, express_1.Router)();
-const createPostSchema = expense_1.expenseSchema.omit({ id: true });
+const sharedTypes_1 = require("./sharedTypes");
+const kindeAuth_1 = require("./kindeAuth");
+const expenseRoutes = (0, express_1.Router)();
+const createPostSchema = sharedTypes_1.expenseSchema.omit({ id: true });
 const fakeExpenses = [
     { id: 1, title: "Groceries", amount: 50 },
     { id: 2, title: "Games", amount: 100 },
     { id: 3, title: "Osmows", amount: 20 },
 ];
-router.get("/expenses", kinde_1.getUser, (req, res) => 
-// const user = req.user;
-res.json({ expenses: fakeExpenses }));
-router.get("/expenses/total-spent", kinde_1.getUser, (req, res) => {
-    // const user = req.user;
+expenseRoutes.get("/expenses", kindeAuth_1.getUser, (req, res) => res.json({ expenses: fakeExpenses }));
+expenseRoutes.get("/expenses/total-spent", kindeAuth_1.getUser, (req, res) => {
     const total = fakeExpenses.reduce((total, expense) => total + expense.amount, 0);
     return res.json({ total });
 });
-router.post("/expenses", kinde_1.getUser, (0, zod_express_middleware_1.validateRequestBody)(createPostSchema), (req, res) => {
+expenseRoutes.post("/expenses", kindeAuth_1.getUser, (0, zod_express_middleware_1.validateRequestBody)(createPostSchema), (req, res) => {
     const expense = req.body;
     fakeExpenses.push(Object.assign(Object.assign({}, expense), { id: fakeExpenses.length + 1 }));
     res.status(201);
     return res.json(expense);
 });
-router.get("/expenses/:id([0-9]+)", kinde_1.getUser, (req, res) => {
+expenseRoutes.get("/expenses/:id([0-9]+)", kindeAuth_1.getUser, (req, res) => {
     const id = Number.parseInt(req.params.id);
     const expense = fakeExpenses.find((expense) => expense.id === id);
     if (expense) {
@@ -35,7 +32,7 @@ router.get("/expenses/:id([0-9]+)", kinde_1.getUser, (req, res) => {
         res.status(404).send("Expense not found");
     }
 });
-router.delete("/expenses/:id([0-9]+)", kinde_1.getUser, (req, res) => {
+expenseRoutes.delete("/expenses/:id([0-9]+)", kindeAuth_1.getUser, (req, res) => {
     const id = Number.parseInt(req.params.id);
     const index = fakeExpenses.findIndex((expense) => expense.id === id);
     if (index !== -1) {
@@ -46,4 +43,4 @@ router.delete("/expenses/:id([0-9]+)", kinde_1.getUser, (req, res) => {
         res.status(404).send("Expense not found");
     }
 });
-exports.default = router;
+exports.default = expenseRoutes;

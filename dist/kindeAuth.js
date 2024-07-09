@@ -13,6 +13,15 @@ exports.sessionManager = exports.kindeClient = void 0;
 exports.getUser = getUser;
 const kinde_typescript_sdk_1 = require("@kinde-oss/kinde-typescript-sdk");
 require("dotenv/config");
+const zod_1 = require("zod");
+const KindeEnv = zod_1.z.object({
+    KINDE_DOMAIN: zod_1.z.string(),
+    KINDE_CLIENT_ID: zod_1.z.string(),
+    KINDE_CLIENT_SECRET: zod_1.z.string(),
+    KINDE_REDIRECT_URI: zod_1.z.string().url(),
+    KINDE_LOGOUT_REDIRECT_URI: zod_1.z.string().url(),
+});
+const ProcessEnv = KindeEnv.parse(process.env);
 exports.kindeClient = (0, kinde_typescript_sdk_1.createKindeServerClient)(kinde_typescript_sdk_1.GrantType.AUTHORIZATION_CODE, {
     authDomain: process.env.KINDE_DOMAIN,
     clientId: process.env.KINDE_CLIENT_ID,
@@ -32,7 +41,7 @@ const sessionManager = (req, res) => ({
             const cookieOptions = {
                 httpOnly: true,
                 secure: true,
-                sameSite: "Lax",
+                sameSite: "lax",
             };
             res.cookie(key, JSON.stringify(value), cookieOptions);
         });
