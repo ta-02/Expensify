@@ -1,21 +1,23 @@
 import express, { Express, Request, Response } from "express";
+import path from "path";
 import morgan from "morgan";
 import bodyParser from "body-parser";
-import router from "./router";
-import path from "path";
-import authRouter from "./auth";
 import cookieParser from "cookie-parser";
+import expenseRoutes from "./expenseRoutes";
+import authRouter from "./authRoutes";
 
 const app: Express = express();
 
-app.use(morgan("dev"));
-app.use(bodyParser.json());
-app.use(cookieParser());
+const middlewares = [
+  morgan("dev"),
+  bodyParser.json(),
+  cookieParser(),
+  express.static(path.join(__dirname, "../frontend/dist")),
+];
 
-app.use("/api", router);
+middlewares.forEach((middleware) => app.use(middleware));
+app.use("/api", expenseRoutes);
 app.use("/api", authRouter);
-
-app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
 app.get("*", (req: Request, res: Response) => {
   res.sendFile(path.resolve(__dirname, "../frontend/dist/index.html"));
