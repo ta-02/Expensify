@@ -8,10 +8,14 @@ const morgan_1 = __importDefault(require("morgan"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const router_1 = __importDefault(require("./router"));
 const path_1 = __importDefault(require("path"));
+const auth_1 = __importDefault(require("./auth"));
+const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const app = (0, express_1.default)();
 app.use((0, morgan_1.default)("dev"));
 app.use(body_parser_1.default.json());
-const apiRoutes = app.use("/api", router_1.default);
+app.use((0, cookie_parser_1.default)());
+app.use("/api", auth_1.default);
+app.use("/api", router_1.default);
 app.use(express_1.default.static(path_1.default.join(__dirname, "../../frontend/dist")));
 app.get("*", (req, res) => {
     res.sendFile(path_1.default.resolve(__dirname, "../../frontend/dist/index.html"));
