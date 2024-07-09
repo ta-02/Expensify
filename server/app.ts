@@ -12,13 +12,13 @@ app.use(morgan("dev"));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-app.use("/api", authRouter);
 app.use("/api", router);
+app.use("/api", authRouter);
 
-app.use(express.static(path.join(__dirname, "../../frontend/dist")));
+app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
 app.get("*", (req: Request, res: Response) => {
-  res.sendFile(path.resolve(__dirname, "../../frontend/dist/index.html"));
+  res.sendFile(path.resolve(__dirname, "../frontend/dist/index.html"));
 });
 
 export default app;

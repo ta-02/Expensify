@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { z } from "zod";
 import { validateRequestBody } from "zod-express-middleware";
 import { expenseSchema, Expense } from "../types/expense";
 import { getUser } from "./kinde";

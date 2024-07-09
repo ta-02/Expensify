@@ -2,12 +2,8 @@ import {
   createKindeServerClient,
   GrantType,
   SessionManager,
-  type UserType,
 } from "@kinde-oss/kinde-typescript-sdk";
-import * as dotenv from "dotenv";
-import path from "path";
-
-dotenv.config({ path: path.resolve(__dirname, "../.env") });
+import "dotenv/config";
 
 export const kindeClient = createKindeServerClient(
   GrantType.AUTHORIZATION_CODE,
@@ -19,8 +15,6 @@ export const kindeClient = createKindeServerClient(
     logoutRedirectURL: process.env.KINDE_LOGOUT_REDIRECT_URI!,
   },
 );
-
-let store: Record<string, unknown> = {};
 
 export const sessionManager = (req: any, res: any): SessionManager => ({
   async getSessionItem(key: string) {
@@ -44,12 +38,6 @@ export const sessionManager = (req: any, res: any): SessionManager => ({
     });
   },
 });
-
-// type Env = {
-//   Variables: {
-//     user: UserType;
-//   };
-// };
 
 export async function getUser(req: any, res: any, next: any) {
   try {
