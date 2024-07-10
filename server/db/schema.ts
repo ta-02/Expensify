@@ -8,7 +8,7 @@ export const expenses = pgTable(
     title: text("title").notNull(),
     amount: numeric("amount", { precision: 12, scale: 2 }).notNull(),
   },
-  (userId) => {
+  (expenses) => {
     return {
       userIdIndex: index("name_idx").on(expenses.userId),
     };
