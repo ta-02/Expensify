@@ -15,14 +15,18 @@
     "@tanstack/react-form": "^0.25.3",
     "@tanstack/react-query": "^5.50.1",
     "@tanstack/react-router": "^1.43.12",
+    "@tanstack/zod-form-adapter": "^0.25.3",
     "axios": "^1.7.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "date-fns": "^3.6.0",
     "lucide-react": "^0.401.0",
     "react": "^18.3.1",
+    "react-day-picker": "^8.10.1",
     "react-dom": "^18.3.1",
     "tailwind-merge": "^2.4.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@tanstack/router-devtools": "^1.43.12",

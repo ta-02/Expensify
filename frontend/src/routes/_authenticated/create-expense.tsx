@@ -2,7 +2,10 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import { FieldApi, useForm } from "@tanstack/react-form";
+import { zodValidator } from "@tanstack/zod-form-adapter";
+import { createExpenseSchema } from "@server/sharedTypes";
 import axios from "axios";
 
 export const Route = createFileRoute("/_authenticated/create-expense")({
@@ -23,6 +26,7 @@ function FieldInfo({ field }: { field: FieldApi<any, any, any, any> }) {
 function CreateExpense() {
   const navigate = useNavigate();
   const form = useForm({
+    validatorAdapter: zodValidator(),
     defaultValues: {
       title: "",
       amount: "0",
@@ -46,12 +50,16 @@ function CreateExpense() {
           e.stopPropagation();
           form.handleSubmit();
         }}
-        className="w-[350px] m-auto"
+        className="flex flex-col gap-y-4 w-[350px] m-auto"
       >
         <form.Field
           name="title"
+          validatorAdapter={zodValidator()}
+          validators={{
+            onChange: createExpenseSchema.shape.title,
+          }}
           children={(field) => (
-            <>
+            <div>
               <Label htmlFor={field.name}>Title</Label>
               <Input
                 id={field.name}
@@ -61,13 +69,17 @@ function CreateExpense() {
                 onChange={(e) => field.handleChange(e.target.value)}
               />
               <FieldInfo field={field} />
-            </>
+            </div>
           )}
         />
         <form.Field
           name="amount"
+          validatorAdapter={zodValidator()}
+          validators={{
+            onChange: createExpenseSchema.shape.amount,
+          }}
           children={(field) => (
-            <>
+            <div>
               <Label htmlFor={field.name}>Amount</Label>
               <Input
                 id={field.name}
@@ -78,7 +90,25 @@ function CreateExpense() {
                 onChange={(e) => field.handleChange(e.target.value)}
               />
               <FieldInfo field={field} />
-            </>
+            </div>
+          )}
+        />
+        <form.Field
+          name="date"
+          validatorAdapter={zodValidator()}
+          validators={{
+            onChange: createExpenseSchema.shape.date,
+          }}
+          children={(field) => (
+            <div className="self-center">
+              <Calendar
+                mode="single"
+                selected={field.state.value}
+                onSelect={(e) => field.handleChange(e.target.value)}
+                className="rounded-md border"
+              />
+              <FieldInfo field={field} />
+            </div>
           )}
         />
         <form.Subscribe

@@ -1,6 +1,6 @@
 import { Router, Response } from "express";
 import { validateRequestBody } from "zod-express-middleware";
-import { expenseSchema } from "./sharedTypes";
+import { createExpenseSchema } from "./sharedTypes";
 import { getUser } from "./kindeAuth";
 import { UserInfo } from "./sharedTypes";
 import { db } from "./db";
@@ -8,8 +8,6 @@ import { expenses as expenseTable } from "./db/schema";
 import { and, desc, eq, sum } from "drizzle-orm";
 
 const expenseRoutes = Router();
-
-const createPostSchema = expenseSchema.omit({ id: true });
 
 expenseRoutes.get(
   "/expenses",
@@ -44,14 +42,17 @@ expenseRoutes.get(
 expenseRoutes.post(
   "/expenses",
   getUser,
-  validateRequestBody(createPostSchema),
+  validateRequestBody(createExpenseSchema),
   async (req: UserInfo, res: Response) => {
     const user = req.user;
     const expense = req.body;
 
     const result = await db
       .insert(expenseTable)
-      .values({ ...expense, userId: user.id })
+      .values({
+        ...expense,
+        userId: user.id,
+      })
       .returning();
 
     return res.status(201).json(result);

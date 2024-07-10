@@ -23,6 +23,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.31.4",
+    "drizzle-zod": "^0.5.1",
     "express": "^4.19.2",
     "morgan": "^1.10.0",
     "postgres": "^3.4.4",
