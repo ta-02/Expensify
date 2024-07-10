@@ -1,21 +1,15 @@
-import { Router, Request, Response } from "express";
+import { Router, Response } from "express";
 import { validateRequestBody } from "zod-express-middleware";
-import { expenseSchema, Expense } from "./sharedTypes";
+import { expenseSchema } from "./sharedTypes";
 import { getUser } from "./kindeAuth";
 import { UserInfo } from "./sharedTypes";
 import { db } from "./db";
 import { expenses as expenseTable } from "./db/schema";
-import { eq } from "drizzle-orm";
+import { and, desc, eq, sum } from "drizzle-orm";
 
 const expenseRoutes = Router();
 
 const createPostSchema = expenseSchema.omit({ id: true });
-
-const fakeExpenses: Expense[] = [
-  { id: 1, title: "Groceries", amount: "50" },
-  { id: 2, title: "Games", amount: "100" },
-  { id: 3, title: "Osmows", amount: "20" },
-];
 
 expenseRoutes.get(
   "/expenses",
@@ -25,7 +19,9 @@ expenseRoutes.get(
     const expenses = await db
       .select()
       .from(expenseTable)
-      .where(eq(expenseTable.userId, user.id));
+      .where(eq(expenseTable.userId, user.id))
+      .orderBy(desc(expenseTable.createdAt))
+      .limit(100);
     return res.json({ expenses: expenses });
   },
 );
@@ -33,12 +29,15 @@ expenseRoutes.get(
 expenseRoutes.get(
   "/expenses/total-spent",
   getUser,
-  (req: Request, res: Response) => {
-    const total = fakeExpenses.reduce(
-      (total, expense) => total + +expense.amount,
-      0,
-    );
-    return res.json({ total });
+  async (req: UserInfo, res: Response) => {
+    const user = req.user;
+    const result = await db
+      .select({ total: sum(expenseTable.amount) })
+      .from(expenseTable)
+      .where(eq(expenseTable.userId, user.id))
+      .limit(1)
+      .then((res) => res[0]);
+    return res.json(result);
   },
 );
 
@@ -49,10 +48,12 @@ expenseRoutes.post(
   async (req: UserInfo, res: Response) => {
     const user = req.user;
     const expense = req.body;
+
     const result = await db
       .insert(expenseTable)
       .values({ ...expense, userId: user.id })
       .returning();
+
     return res.status(201).json(result);
   },
 );
@@ -60,29 +61,42 @@ expenseRoutes.post(
 expenseRoutes.get(
   "/expenses/:id([0-9]+)",
   getUser,
-  (req: Request, res: Response) => {
+  async (req: UserInfo, res: Response) => {
     const id = Number.parseInt(req.params.id);
-    const expense = fakeExpenses.find((expense) => expense.id === id);
-    if (expense) {
-      res.json(expense);
-    } else {
+    const user = req.user;
+
+    const expense = await db
+      .select()
+      .from(expenseTable)
+      .where(and(eq(expenseTable.userId, user.id), eq(expenseTable.id, id)))
+      .then((res) => res[0]);
+
+    if (!expense) {
       res.status(404).send("Expense not found");
     }
+
+    res.json({ expense });
   },
 );
 
 expenseRoutes.delete(
   "/expenses/:id([0-9]+)",
   getUser,
-  (req: Request, res: Response) => {
+  async (req: UserInfo, res: Response) => {
     const id = Number.parseInt(req.params.id);
-    const index = fakeExpenses.findIndex((expense) => expense.id === id);
-    if (index !== -1) {
-      const deletedExpense = fakeExpenses.splice(index, 1)[0];
-      res.json({ expense: deletedExpense });
-    } else {
+    const user = req.user;
+
+    const deletedExpense = await db
+      .delete(expenseTable)
+      .where(and(eq(expenseTable.userId, user.id), eq(expenseTable.id, id)))
+      .returning()
+      .then((res) => res[0]);
+
+    if (!deletedExpense) {
       res.status(404).send("Expense not found");
     }
+
+    res.json({ expense: deletedExpense });
   },
 );
 

@@ -8,8 +8,6 @@ export const expenseSchema = z.object({
   amount: z.string(),
 });
 
-export type Expense = z.infer<typeof expenseSchema>;
-
 export interface UserInfo extends Request {
   user: UserType;
 }

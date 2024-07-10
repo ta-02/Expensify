@@ -13,7 +13,7 @@ export const Route = createFileRoute("/_authenticated/")({
   component: Index,
 });
 
-const getTotalSpent = () => {
+const getTotalSpent = async () => {
   return axios
     .get("/api/expenses/total-spent")
     .then((res) => res.data)
