@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
-import { createFileRoute } from "@tanstack/react-router";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
@@ -10,12 +10,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { LucideTrash } from "lucide-react";
 import axios from "axios";
 
 type Expense = {
-  id: "number";
+  id: number;
   title: string;
   amount: string;
+  date: string;
 };
 
 export const Route = createFileRoute("/_authenticated/expenses")({
@@ -51,6 +54,8 @@ function Expenses() {
               <TableHead className="w-[100px]">ID</TableHead>
               <TableHead>Name</TableHead>
               <TableHead className="text-right">Amount</TableHead>
+              <TableHead className="text-right">Date</TableHead>
+              <TableHead className="text-right">Delete</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -59,6 +64,10 @@ function Expenses() {
                 <TableCell className="font-medium">{item.id}</TableCell>
                 <TableCell>{item.title}</TableCell>
                 <TableCell className="text-right">{item.amount}</TableCell>
+                <TableCell className="text-right">{item.date}</TableCell>
+                <TableCell className="text-right">
+                  <ExpenseDeleteButton id={item.id} />
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -69,3 +78,33 @@ function Expenses() {
 }
 
 export default Expenses;
+
+const ExpenseDeleteButton = ({ id }: { id: number }) => {
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: async ({ id }: { id: number }) => {
+      await axios.delete(`/api/expenses/${id}`).catch((e) => {
+        throw new Error("Server Error" + e.message);
+      });
+    },
+    onError: () => {
+      // use Toast
+      console.log("error happened");
+    },
+    onSuccess: () => {
+      // use Toast
+      queryClient.invalidateQueries(["get-all-expenses"]);
+    },
+  });
+
+  return (
+    <Button
+      disabled={mutation.isPending}
+      onClick={() => mutation.mutate({ id })}
+      variant="outline"
+      size="icon"
+    >
+      {mutation.isPending ? "..." : <LucideTrash className="h-4 w-4" />}
+    </Button>
+  );
+};

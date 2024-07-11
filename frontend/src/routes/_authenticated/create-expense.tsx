@@ -12,7 +12,7 @@ export const Route = createFileRoute("/_authenticated/create-expense")({
   component: CreateExpense,
 });
 
-function FieldInfo({ field }: { field: FieldApi<any, any, any, any> }) {
+function FieldInfo({ field }: { field: FieldApi<any, any, any, any, any> }) {
   return (
     <>
       {field.state.meta.isTouched && field.state.meta.errors.length ? (
@@ -30,6 +30,7 @@ function CreateExpense() {
     defaultValues: {
       title: "",
       amount: "0",
+      date: new Date().toISOString(),
     },
     onSubmit: async ({ value }) => {
       try {
@@ -103,8 +104,10 @@ function CreateExpense() {
             <div className="self-center">
               <Calendar
                 mode="single"
-                selected={field.state.value}
-                onSelect={(e) => field.handleChange(e.target.value)}
+                selected={new Date(field.state.value)}
+                onSelect={(date) =>
+                  field.handleChange((date ?? new Date()).toISOString())
+                }
                 className="rounded-md border"
               />
               <FieldInfo field={field} />
@@ -113,7 +116,7 @@ function CreateExpense() {
         />
         <form.Subscribe
           selector={(state) => [state.canSubmit, state.isSubmitting]}
-          children={([_, isSubmitting]) => (
+          children={([canSubmit, isSubmitting]) => (
             <Button className="mt-4" type="submit">
               {isSubmitting ? "..." : "Submit"}
             </Button>

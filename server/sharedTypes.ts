@@ -11,6 +11,7 @@ const expenseSchema = z.object({
   amount: z.string().regex(/^\d+(\.\d{1,2})?$/, {
     message: "Amount must be a valid monetary value",
   }),
+  date: z.string(),
 });
 
 export const createExpenseSchema = expenseSchema.omit({ id: true });
