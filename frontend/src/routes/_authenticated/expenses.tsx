@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { createFileRoute, useRouter } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { LucideTrash } from "lucide-react";
+import { toast } from "sonner";
 import axios from "axios";
 
 type Expense = {
@@ -43,7 +44,7 @@ function Expenses() {
   if (error) return "An error has occurred: " + error.message;
 
   return (
-    <div className="p-4 w-[350px] m-auto">
+    <div className="p-4 w-max m-auto">
       {isPending ? (
         <Skeleton className="w-[350px] mt-4 h-[20px] rounded-full" />
       ) : (
@@ -88,11 +89,10 @@ const ExpenseDeleteButton = ({ id }: { id: number }) => {
       });
     },
     onError: () => {
-      // use Toast
-      console.log("error happened");
+      toast.error("Error while deleting the expense");
     },
     onSuccess: () => {
-      // use Toast
+      toast.success("Expense deleted");
       queryClient.invalidateQueries(["get-all-expenses"]);
     },
   });

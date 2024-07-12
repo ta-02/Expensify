@@ -1,6 +1,7 @@
 import { ModeToggle } from "@/components/mode-toggle";
 import { ThemeProvider } from "@/components/theme-provider";
 import Footer from "@/components/ui/footer";
+import { Toaster } from "@/components/ui/sonner";
 import { type QueryClient } from "@tanstack/react-query";
 import {
   createRootRouteWithContext,
@@ -48,6 +49,7 @@ function Root() {
         <NavBar />
         <hr />
         <Outlet />
+        <Toaster />
         <Footer />
       </ThemeProvider>
       {/* <TanStackRouterDevtools /> */}

@@ -6,6 +6,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { FieldApi, useForm } from "@tanstack/react-form";
 import { zodValidator } from "@tanstack/zod-form-adapter";
 import { createExpenseSchema } from "@server/sharedTypes";
+import { toast } from "sonner";
 import axios from "axios";
 
 export const Route = createFileRoute("/_authenticated/create-expense")({
@@ -35,8 +36,10 @@ function CreateExpense() {
     onSubmit: async ({ value }) => {
       try {
         await axios.post("/api/expenses", value);
+        toast.success("Expense created");
         navigate({ to: "/expenses" });
       } catch (error) {
+        toast.error("Failed to create expense");
         throw new Error("Failed to create expense: " + error);
       }
     },
