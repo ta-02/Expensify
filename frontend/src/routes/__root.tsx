@@ -1,3 +1,6 @@
+import { ModeToggle } from "@/components/mode-toggle";
+import { ThemeProvider } from "@/components/theme-provider";
+import Footer from "@/components/ui/footer";
 import { type QueryClient } from "@tanstack/react-query";
 import {
   createRootRouteWithContext,
@@ -32,6 +35,7 @@ function NavBar() {
         <Link to="/profile" className="[&.active]:font-bold">
           Profile
         </Link>
+        <ModeToggle />
       </div>
     </div>
   );
@@ -40,9 +44,12 @@ function NavBar() {
 function Root() {
   return (
     <>
-      <NavBar />
-      <hr />
-      <Outlet />
+      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+        <NavBar />
+        <hr />
+        <Outlet />
+        <Footer />
+      </ThemeProvider>
       {/* <TanStackRouterDevtools /> */}
     </>
   );
