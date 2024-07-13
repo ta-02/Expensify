@@ -19,21 +19,30 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 
 function NavBar() {
   return (
-    <div className="p-2 flex justify-between">
-      <Link to="/" className="[&.active]:font-bold">
-        <h1 className="text-2xl font-bold">Expense Tracker</h1>
+    <div className="p-4 flex flex-col sm:flex-row justify-between items-center">
+      <Link to="/" className="flex items-center space-x-2 mb-4 sm:mb-0">
+        <h1 className="text-3xl font-bold">Expense Tracker</h1>
       </Link>
-      <div className="p-2 flex gap-6">
-        <Link to="/expenses" className="[&.active]:font-bold">
+      <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6">
+        <Link
+          to="/expenses"
+          className="[&.active]:font-bold hover:text-gray-300"
+        >
           Expenses
         </Link>
-        <Link to="/create-expense" className="[&.active]:font-bold">
+        <Link
+          to="/create-expense"
+          className="[&.active]:font-bold hover:text-gray-300"
+        >
           Create
         </Link>
-        <Link to="/about" className="[&.active]:font-bold">
+        <Link to="/about" className="[&.active]:font-bold hover:text-gray-300">
           About
         </Link>
-        <Link to="/profile" className="[&.active]:font-bold">
+        <Link
+          to="/profile"
+          className="[&.active]:font-bold hover:text-gray-300"
+        >
           Profile
         </Link>
         <ModeToggle />
@@ -46,11 +55,15 @@ function Root() {
   return (
     <>
       <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-        <NavBar />
-        <hr />
-        <Outlet />
-        <Toaster />
-        <Footer />
+        <div className="flex flex-col min-h-screen">
+          <NavBar />
+          <hr />
+          <div className="flex-grow">
+            <Outlet />
+          </div>
+          <Toaster />
+          <Footer />
+        </div>
       </ThemeProvider>
       {/* <TanStackRouterDevtools /> */}
     </>

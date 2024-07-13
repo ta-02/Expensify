@@ -7,6 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
+import { Skeleton } from "@/components/ui/skeleton";
 import axios from "axios";
 
 export const Route = createFileRoute("/_authenticated/")({
@@ -31,14 +32,18 @@ function Index() {
   if (error) return "An error has occurred: " + error.message;
 
   return (
-    <div className="p-4 w-[350px] m-auto">
-      <Card>
-        <CardHeader>
-          <CardTitle>Total Spent</CardTitle>
-          <CardDescription>Total amount you have spent</CardDescription>
+    <div className="p-4 w-full max-w-sm m-auto">
+      <Card className="shadow-lg rounded-lg overflow-hidden">
+        <CardHeader className="text-white p-4">
+          <CardTitle className="text-lg font-bold">Total Spent</CardTitle>
+          <CardDescription className="text-sm">
+            Total amount you have spent
+          </CardDescription>
         </CardHeader>
-        <CardContent>
-          <p>{isPending ? "..." : data.total}</p>
+        <CardContent className="p-4">
+          <p className="text-2xl font-semibold">
+            {isPending ? <Skeleton className="h-6 w-24" /> : `$${data.total}`}
+          </p>
         </CardContent>
       </Card>
     </div>

@@ -10,7 +10,7 @@ const Login = () => {
         <a href="/api/login">Login!</a>
       </Button>
       <Button asChild>
-        <a href="/api/register">Login!</a>
+        <a href="/api/register">Register!</a>
       </Button>
     </div>
   );

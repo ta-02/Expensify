@@ -44,11 +44,43 @@ function Expenses() {
   if (error) return "An error has occurred: " + error.message;
 
   return (
-    <div className="p-4 w-max m-auto">
+    <div className="p-4 max-w-full lg:w-max m-auto overflow-x-auto">
       {isPending ? (
-        <Skeleton className="w-[350px] mt-4 h-[20px] rounded-full" />
+        <Table className="min-w-full lg:min-w-max">
+          <TableCaption>A list of your Expenses</TableCaption>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[100px]">ID</TableHead>
+              <TableHead>Name</TableHead>
+              <TableHead className="text-right">Amount</TableHead>
+              <TableHead className="text-right">Date</TableHead>
+              <TableHead className="text-right">Delete</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {[...Array(3)].map((_, index) => (
+              <TableRow key={index}>
+                <TableCell className="font-medium">
+                  <Skeleton className="w-full h-[20px] rounded" />
+                </TableCell>
+                <TableCell>
+                  <Skeleton className="w-full h-[20px] rounded" />
+                </TableCell>
+                <TableCell className="text-right">
+                  <Skeleton className="w-full h-[20px] rounded" />
+                </TableCell>
+                <TableCell className="text-right">
+                  <Skeleton className="w-full h-[20px] rounded" />
+                </TableCell>
+                <TableCell className="text-right">
+                  <Skeleton className="w-full h-[20px] rounded" />
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       ) : (
-        <Table>
+        <Table className="min-w-full lg:min-w-max">
           <TableCaption>A list of your Expenses</TableCaption>
           <TableHeader>
             <TableRow>

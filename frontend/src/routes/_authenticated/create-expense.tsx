@@ -46,8 +46,8 @@ function CreateExpense() {
   });
 
   return (
-    <div>
-      <h2 className="p-2">Create Expense</h2>
+    <div className="flex flex-col items-center">
+      <h2 className="p-2 mt-4 text-xl font-bold">Create Expense</h2>
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -83,7 +83,7 @@ function CreateExpense() {
             onChange: createExpenseSchema.shape.amount,
           }}
           children={(field) => (
-            <div>
+            <div className="mt-2">
               <Label htmlFor={field.name}>Amount</Label>
               <Input
                 id={field.name}
@@ -104,7 +104,7 @@ function CreateExpense() {
             onChange: createExpenseSchema.shape.date,
           }}
           children={(field) => (
-            <div className="self-center">
+            <div className="self-center mt-4">
               <Calendar
                 mode="single"
                 selected={new Date(field.state.value)}
@@ -120,7 +120,7 @@ function CreateExpense() {
         <form.Subscribe
           selector={(state) => [state.canSubmit, state.isSubmitting]}
           children={([canSubmit, isSubmitting]) => (
-            <Button className="mt-4" type="submit">
+            <Button className="mt-4 mb-8" type="submit">
               {isSubmitting ? "..." : "Submit"}
             </Button>
           )}

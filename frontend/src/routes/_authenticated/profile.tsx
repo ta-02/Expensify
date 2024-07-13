@@ -18,17 +18,22 @@ function Profile() {
   const user: UserType = data.user;
 
   return (
-    <div className="p-2">
-      <div className="flex items-center gap-2">
-        <Avatar>
-          {data.user.picture && (
-            <AvatarImage src={user.picture} alt={user.given_name} />
+    <div className="p-2 mt-4">
+      <div className="flex items-center justify-center flex-col md:flex-row md:items-start gap-4">
+        <div className="flex-shrink-0">
+          {data.user.picture ? (
+            <Avatar>
+              <AvatarImage src={user.picture} alt={user.given_name} />
+            </Avatar>
+          ) : (
+            <Avatar>
+              <AvatarFallback>{user.given_name[0]}</AvatarFallback>
+            </Avatar>
           )}
-          <AvatarFallback>CN</AvatarFallback>
-        </Avatar>
-        <p>Hello {user.name}</p>
-        <div>
-          <Button asChild>
+        </div>
+        <div className="text-lg">
+          <p>Hello {user.name}</p>
+          <Button>
             <a href="/api/logout">Logout!</a>
           </Button>
         </div>
