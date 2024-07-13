@@ -7,6 +7,13 @@ import { FieldApi, useForm } from "@tanstack/react-form";
 import { zodValidator } from "@tanstack/zod-form-adapter";
 import { createExpenseSchema } from "@server/sharedTypes";
 import { toast } from "sonner";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import axios from "axios";
 
 export const Route = createFileRoute("/_authenticated/create-expense")({
@@ -32,6 +39,7 @@ function CreateExpense() {
       title: "",
       amount: "0",
       date: new Date().toISOString(),
+      category: "Other",
     },
     onSubmit: async ({ value }) => {
       try {
@@ -76,6 +84,39 @@ function CreateExpense() {
             </div>
           )}
         />
+
+        <form.Field
+          name="category"
+          children={(field) => (
+            <div>
+              <Label htmlFor={field.name}>Category</Label>
+              <Select
+                onValueChange={field.handleChange}
+                defaultValue={field.value}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Other" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Housing & Utilities">
+                    Housing & Utilities
+                  </SelectItem>
+                  <SelectItem value="Transportation">Transportation</SelectItem>
+                  <SelectItem value="Food & Dining">Food & Dining</SelectItem>
+                  <SelectItem value="Healthcare & Insurance">
+                    Healthcare & Insurance
+                  </SelectItem>
+                  <SelectItem value="Entertainment & Personal Care">
+                    Entertainment & Personal Care
+                  </SelectItem>
+                  <SelectItem value="Other">Other</SelectItem>
+                </SelectContent>
+              </Select>
+              <FieldInfo field={field} />
+            </div>
+          )}
+        />
+
         <form.Field
           name="amount"
           validatorAdapter={zodValidator()}
@@ -97,6 +138,7 @@ function CreateExpense() {
             </div>
           )}
         />
+
         <form.Field
           name="date"
           validatorAdapter={zodValidator()}

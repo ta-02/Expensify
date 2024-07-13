@@ -12,6 +12,7 @@ const expenseSchema = z.object({
     message: "Amount must be a valid monetary value",
   }),
   date: z.string(),
+  category: z.string(),
 });
 
 export const createExpenseSchema = expenseSchema.omit({ id: true });

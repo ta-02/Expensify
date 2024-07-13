@@ -34,7 +34,7 @@ function Index() {
   return (
     <div className="p-4 w-full max-w-sm m-auto">
       <Card className="shadow-lg rounded-lg overflow-hidden">
-        <CardHeader className="text-white p-4">
+        <CardHeader className="p-4">
           <CardTitle className="text-lg font-bold">Total Spent</CardTitle>
           <CardDescription className="text-sm">
             Total amount you have spent

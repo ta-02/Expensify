@@ -17,6 +17,7 @@ export const expenses = pgTable(
     userId: text("user_id").notNull(),
     title: text("title").notNull(),
     amount: numeric("amount", { precision: 12, scale: 2 }).notNull(),
+    category: text("category").notNull().default("Other"),
     createdAt: timestamp("created_at").defaultNow(),
     date: date("date").notNull(),
   },

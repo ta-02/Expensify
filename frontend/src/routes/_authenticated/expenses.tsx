@@ -13,14 +13,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { LucideTrash } from "lucide-react";
 import { toast } from "sonner";
+import { createExpenseSchema as Expense } from "@server/sharedTypes";
 import axios from "axios";
-
-type Expense = {
-  id: number;
-  title: string;
-  amount: string;
-  date: string;
-};
 
 export const Route = createFileRoute("/_authenticated/expenses")({
   component: Expenses,
@@ -88,6 +82,7 @@ function Expenses() {
               <TableHead>Name</TableHead>
               <TableHead className="text-right">Amount</TableHead>
               <TableHead className="text-right">Date</TableHead>
+              <TableHead className="text-right">Category</TableHead>
               <TableHead className="text-right">Delete</TableHead>
             </TableRow>
           </TableHeader>
@@ -98,6 +93,7 @@ function Expenses() {
                 <TableCell>{item.title}</TableCell>
                 <TableCell className="text-right">{item.amount}</TableCell>
                 <TableCell className="text-right">{item.date}</TableCell>
+                <TableCell className="text-right">{item.category}</TableCell>
                 <TableCell className="text-right">
                   <ExpenseDeleteButton id={item.id} />
                 </TableCell>

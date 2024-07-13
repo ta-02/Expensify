@@ -22,6 +22,34 @@
       "when": 1720663875424,
       "tag": "0002_absent_phantom_reporter",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1720899041527,
+      "tag": "0003_quick_proteus",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1720902881876,
+      "tag": "0004_odd_blonde_phantom",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1720903462973,
+      "tag": "0005_tiny_garia",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1720904025171,
+      "tag": "0006_huge_jackal",
+      "breakpoints": true
     }
   ]
 }
