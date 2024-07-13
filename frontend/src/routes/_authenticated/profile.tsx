@@ -32,8 +32,8 @@ function Profile() {
           )}
         </div>
         <div className="text-lg">
-          <p>Hello {user.name}</p>
-          <Button>
+          <p className="mt-2">Hello {user.name}</p>
+          <Button className="mt-4">
             <a href="/api/logout">Logout!</a>
           </Button>
         </div>
