@@ -21,7 +21,7 @@ function NavBar() {
   return (
     <div className="p-4 flex flex-col sm:flex-row justify-between items-center">
       <Link to="/" className="flex items-center space-x-2 mb-4 sm:mb-0">
-        <h1 className="text-3xl font-bold">Expense Tracker</h1>
+        <h1 className="text-3xl font-bold">Expensify💸</h1>
       </Link>
       <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6">
         <Link
