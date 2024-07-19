@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 
 const Login = () => {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col font-bold gap-y-4 w-[350px] m-auto mt-4">
       Please login
       <Button asChild>
         <a href="/api/login">Login!</a>
