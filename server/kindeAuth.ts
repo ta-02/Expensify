@@ -27,12 +27,12 @@ export const kindeClient = createKindeServerClient(
     clientSecret: process.env.KINDE_CLIENT_SECRET!,
     redirectURL: process.env.KINDE_REDIRECT_URI!,
     logoutRedirectURL: process.env.KINDE_LOGOUT_REDIRECT_URI!,
-  }
+  },
 );
 
 export const sessionManager = (
   req: Request,
-  res: Response
+  res: Response,
 ): SessionManager => ({
   async getSessionItem(key: string) {
     const result = req.cookies[key];
@@ -59,7 +59,7 @@ export const sessionManager = (
 export async function getUser(
   req: UserInfo,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     const manager = sessionManager(req, res);

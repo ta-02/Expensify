@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { FieldApi, useForm } from "@tanstack/react-form";
 import { zodValidator } from "@tanstack/zod-form-adapter";
-import { createExpenseSchema } from "@server/sharedTypes";
+import { createExpenseSchema } from "../../types";
 import { toast } from "sonner";
 import {
   Select,
@@ -92,6 +92,7 @@ function CreateExpense() {
               <Label htmlFor={field.name}>Category</Label>
               <Select
                 onValueChange={field.handleChange}
+                // @ts-ignore
                 defaultValue={field.value}
               >
                 <SelectTrigger>
@@ -161,7 +162,7 @@ function CreateExpense() {
         />
         <form.Subscribe
           selector={(state) => [state.canSubmit, state.isSubmitting]}
-          children={([canSubmit, isSubmitting]) => (
+          children={([_canSubmit, isSubmitting]) => (
             <Button className="mt-4 mb-8" type="submit">
               {isSubmitting ? "..." : "Submit"}
             </Button>

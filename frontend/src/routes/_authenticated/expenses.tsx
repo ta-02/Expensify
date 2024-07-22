@@ -13,7 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { LucideTrash } from "lucide-react";
 import { toast } from "sonner";
-import { createExpenseSchema as Expense } from "@server/sharedTypes";
+import type { CreateExpense as Expense } from "../../types";
 import axios from "axios";
 
 export const Route = createFileRoute("/_authenticated/expenses")({
@@ -121,7 +121,7 @@ const ExpenseDeleteButton = ({ id }: { id: number }) => {
     },
     onSuccess: () => {
       toast.success("Expense deleted");
-      queryClient.invalidateQueries(["get-all-expenses"]);
+      queryClient.invalidateQueries({ queryKey: ["get-all-expenses"] });
     },
   });
 

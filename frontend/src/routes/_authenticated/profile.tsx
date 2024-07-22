@@ -23,7 +23,10 @@ function Profile() {
         <div className="flex-shrink-0">
           {data.user.picture ? (
             <Avatar>
-              <AvatarImage src={user.picture} alt={user.given_name} />
+              <AvatarImage
+                src={user.picture ?? undefined}
+                alt={user.given_name}
+              />
             </Avatar>
           ) : (
             <Avatar>
@@ -32,7 +35,7 @@ function Profile() {
           )}
         </div>
         <div className="text-lg">
-          <p className="mt-2">Hello {user.name}</p>
+          <p className="mt-2">Hello {user.given_name}</p>
           <Button className="mt-4">
             <a href="/api/logout">Logout!</a>
           </Button>
