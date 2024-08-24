@@ -14,6 +14,9 @@ expenseRoutes.get(
   getUser,
   async (req: UserInfo, res: Response) => {
     const user = req.user;
+    if (!user) {
+      return res.status(404);
+    }
     const expenses = await db
       .select()
       .from(expenseTable)
@@ -29,6 +32,9 @@ expenseRoutes.get(
   getUser,
   async (req: UserInfo, res: Response) => {
     const user = req.user;
+    if (!user) {
+      return res.status(404);
+    }
     const result = await db
       .select({ total: sum(expenseTable.amount) })
       .from(expenseTable)
@@ -46,7 +52,9 @@ expenseRoutes.post(
   async (req: UserInfo, res: Response) => {
     const user = req.user;
     const expense = req.body;
-
+    if (!user) {
+      return res.status(404);
+    }
     const result = await db
       .insert(expenseTable)
       .values({
@@ -63,8 +71,12 @@ expenseRoutes.get(
   "/expenses/:id([0-9]+)",
   getUser,
   async (req: UserInfo, res: Response) => {
-    const id = Number.parseInt(req.params.id);
+    const id = Number.parseInt(req.params.id!);
     const user = req.user;
+
+    if (!user) {
+      return res.status(404);
+    }
 
     const expense = await db
       .select()
@@ -84,8 +96,12 @@ expenseRoutes.delete(
   "/expenses/:id([0-9]+)",
   getUser,
   async (req: UserInfo, res: Response) => {
-    const id = Number.parseInt(req.params.id);
+    const id = Number.parseInt(req.params.id!);
     const user = req.user;
+
+    if (!user) {
+      return res.status(404);
+    }
 
     const deletedExpense = await db
       .delete(expenseTable)
